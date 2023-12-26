@@ -9,12 +9,11 @@ public class MonsterController : MonoBehaviour
     public GameObject hpBar;
 
     private int hp = 0;
-    private int hpMax = 0;
+    private readonly int hpMax = 10;
 
     // Start is called before the first frame update
     void Start()
     {
-        hpMax = 10;
         hp = hpMax;
         monster.SetInteger("hp", hp);
     }
@@ -26,17 +25,18 @@ public class MonsterController : MonoBehaviour
         print("hp:" + hp);
         if (monster.GetBool("dead"))
         {
-            StartCoroutine(DelayThenFall(2.5f));
+            StartCoroutine(DelayThenFall(1.5f));
         }
-        if (hp <= 0)
-        {
-            monster.SetInteger("hp", 0);
-            monster.SetBool("dead", true);
-        }
+
         if (hp >= 0)
         {
             float _percent = ((float)hp / (float)hpMax);
             hpBar.transform.localScale = new Vector3(_percent, hpBar.transform.localScale.y, hpBar.transform.localScale.z);
+        }
+        if(hp <= 0)
+        {
+            monster.SetInteger("hp", 0);
+            monster.SetBool("dead", true);
         }
     }
 
