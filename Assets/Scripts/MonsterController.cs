@@ -26,7 +26,7 @@ public class MonsterController : MonoBehaviour
         print("hp:" + hp);
         if (monster.GetBool("dead"))
         {
-            StartCoroutine(DelayThenFall(2.0f));
+            StartCoroutine(DelayThenFall(2.5f));
         }
         if (hp <= 0)
         {
