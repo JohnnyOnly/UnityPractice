@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class playerController : MonoBehaviour
 {
@@ -18,12 +19,19 @@ public class playerController : MonoBehaviour
     private Vector2 worldPosTopRight;
     private Animator monsterAnim;
 
+    private int playerHp = 0;
+    private int playerHpMax = 100;
+
+    public Image hpBar;
+
     // Start is called before the first frame update
     void Start()
     {
         print("Start");
         worldPosLeftBottom = Camera.main.ViewportToWorldPoint(Vector2.zero);
         worldPosTopRight = Camera.main.ViewportToWorldPoint(Vector2.one);
+
+        playerHp = playerHpMax;
     }
 
     // Update is called once per frame
@@ -104,9 +112,12 @@ public class playerController : MonoBehaviour
                 hp--;
                 monsterAnim.SetInteger("hp", hp);
                 hurtEnable = false;
-            }   
+            }
         }
 
+        float _percent = ((float)playerHp / (float)playerHpMax);
+        hpBar.transform.localScale = new Vector3(_percent, hpBar.transform.localScale.y, hpBar.transform.localScale.z);
+        print("currentHp:" + playerHp);
     }
 
     void OnCollisionEnter2D(Collision2D coll)
@@ -114,6 +125,7 @@ public class playerController : MonoBehaviour
         print("進入碰撞: " + coll.gameObject.name);
         collision = true;
         monsterAnim = coll.gameObject.GetComponent<Animator>();
+        playerHp--;
     }
     void OnCollisionExit2D(Collision2D coll)
     {
