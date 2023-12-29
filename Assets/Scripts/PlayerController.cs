@@ -5,15 +5,10 @@ using UnityEngine.UI;
 
 public class playerController : MonoBehaviour
 {
-    public Animator player;
+    public Animator player; //Animation anim, Animator player
 
     private float speed = 0.05f;
-    private int status = 0;
-    private int face = 0;
-    private int attack = -1;
-    private int hurt = 0;
-    private bool collision = false;
-    private bool hurtEnable = false;
+    private bool isWalking = false;
 
     private Vector2 worldPosLeftBottom;
     private Vector2 worldPosTopRight;
@@ -31,14 +26,13 @@ public class playerController : MonoBehaviour
         worldPosLeftBottom = Camera.main.ViewportToWorldPoint(Vector2.zero);
         worldPosTopRight = Camera.main.ViewportToWorldPoint(Vector2.one);
 
+        player = GetComponent<Animator>();
         playerHp = playerHpMax;
     }
 
     // Update is called once per frame
     void Update()
     {
-        bool isWalking = false;
-        hurtEnable = false;
 
         Vector3 currentPosition = this.gameObject.transform.position;
         //上下左右, 1234
@@ -46,60 +40,66 @@ public class playerController : MonoBehaviour
         if (Input.GetKey(KeyCode.UpArrow))
         {
             print("Up");
-            isWalking = true;
-            status = 1;
+            player.Play("walk-up");
             currentPosition += new Vector3(0, timeSpeed, 0);
+            isWalking = true;
         }
-        if (Input.GetKey(KeyCode.DownArrow))
+        else if (Input.GetKey(KeyCode.DownArrow))
         {
             print("Down");
-            isWalking = true;
-            status = 2;
+            player.Play("walk-down");
             currentPosition -= new Vector3(0, timeSpeed, 0);
+            isWalking = true;
         }
-        if (Input.GetKey(KeyCode.LeftArrow))
+        else if (Input.GetKey(KeyCode.LeftArrow))
         {
             print("Left");
-            isWalking = true;
-            status = 3;
+            player.Play("walk-left");
             currentPosition -= new Vector3(timeSpeed, 0, 0);
+            isWalking = true;
         }
-        if (Input.GetKey(KeyCode.RightArrow))
+        else if (Input.GetKey(KeyCode.RightArrow))
         {
             print("Right");
-            isWalking = true;
-            status = 4;
+            player.Play("walk-right");
             currentPosition += new Vector3(timeSpeed, 0, 0);
-        }
-        //避免超出場景
-        this.gameObject.transform.position = new Vector3(Mathf.Clamp(currentPosition.x, worldPosLeftBottom.x, worldPosTopRight.x), Mathf.Clamp(currentPosition.y, worldPosLeftBottom.y, worldPosTopRight.y), 0.0f);
-
-        if (isWalking)
-        {
-            player.SetInteger("status", status);
+            isWalking = true;
         }
         else
         {
-            player.SetInteger("status", 0);
-            player.SetInteger("face", status);
-            player.SetInteger("attack", 0);
+            isWalking = false;
         }
+
+        if (isWalking)
+        {
+            player.enabled = true;
+        }
+        else
+        {
+            string animName = this.player.GetCurrentAnimatorClipInfo(0)[0].clip.name;
+            print("current animName:" + animName);
+            if(animName.Equals("player-attack"))
+            {
+                player.enabled = true;
+            }
+            else
+            {
+                player.enabled = false;
+            }
+        }
+ 
+        //避免超出場景
+        this.gameObject.transform.position = new Vector3(Mathf.Clamp(currentPosition.x, worldPosLeftBottom.x, worldPosTopRight.x), Mathf.Clamp(currentPosition.y, worldPosLeftBottom.y, worldPosTopRight.y), 0.0f);
 
         //attack
         if (Input.GetKeyDown(KeyCode.Space))
         {
             print("Attack");
-            attack = 1;
-            hurt = 1;
-            hurtEnable = true;
-        }
-        else if (Input.GetKeyUp(KeyCode.Space))
-        {
-            print("Attack off");
-            attack = 0;
-            hurt = 0;
+            player.enabled = true;
+            player.SetTrigger("attack");
         }
 
+        /*
         if (collision)
         {
             player.SetInteger("attack", attack);
@@ -114,16 +114,17 @@ public class playerController : MonoBehaviour
                 hurtEnable = false;
             }
         }
+        */
 
         float _percent = ((float)playerHp / (float)playerHpMax);
         hpBar.transform.localScale = new Vector3(_percent, hpBar.transform.localScale.y, hpBar.transform.localScale.z);
         print("currentHp:" + playerHp);
     }
 
+
     void OnCollisionEnter2D(Collision2D coll)
     {
         print("進入碰撞: " + coll.gameObject.name);
-        collision = true;
         monsterAnim = coll.gameObject.GetComponent<Animator>();
         playerHp--;
     }
@@ -131,12 +132,10 @@ public class playerController : MonoBehaviour
     {
         print("離開碰撞: " + coll.gameObject.name);
         monsterAnim = null;
-        collision = false;
     }
     void OnCollisionStay2D(Collision2D coll)
     {
         print("持續碰撞: " + coll.gameObject.name);
         monsterAnim = coll.gameObject.GetComponent<Animator>();
-        collision = true;
     }
 }

@@ -561,6 +561,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 723269163}
+  attackAnim: {fileID: 723269163}
   hpBar: {fileID: 2085889353}
 --- !u!95 &723269163
 Animator:
