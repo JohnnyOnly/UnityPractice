@@ -74,30 +74,9 @@ public class playerController : MonoBehaviour
         {
             player.enabled = true;
         }
-        else
-        {
-            string animName = this.player.GetCurrentAnimatorClipInfo(0)[0].clip.name;
-            print("current animName:" + animName);
-            if(animName.Equals("player-attack"))
-            {
-                player.enabled = true;
-            }
-            else
-            {
-                player.enabled = false;
-            }
-        }
  
         //避免超出場景
         this.gameObject.transform.position = new Vector3(Mathf.Clamp(currentPosition.x, worldPosLeftBottom.x, worldPosTopRight.x), Mathf.Clamp(currentPosition.y, worldPosLeftBottom.y, worldPosTopRight.y), 0.0f);
-
-        //attack
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            print("Attack");
-            player.enabled = true;
-            player.SetTrigger("attack");
-        }
 
         /*
         if (collision)

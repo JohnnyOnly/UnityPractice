@@ -14,30 +14,30 @@ public class MonsterController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Animator>();
+        monster = GameObject.FindGameObjectWithTag("Monster").GetComponent<Animator>();
         hp = hpMax;
-        monster.SetInteger("hp", hp);
     }
 
     // Update is called once per frame
     void Update()
     {
-        hp = monster.GetInteger("hp");
         print("hp:" + hp);
-        if (monster.GetBool("dead"))
+        float _percent = ((float)hp / (float)hpMax);
+        hpBar.transform.localScale = new Vector3(_percent, hpBar.transform.localScale.y, hpBar.transform.localScale.z);
+        if(hp<=0)
         {
-            StartCoroutine(DelayThenFall(1.5f));
+            monster.SetTrigger("dead");
+            Invoke("Dead", 1.2f);
+            //StartCoroutine(DelayThenFall(1.0f));
         }
 
-        if (hp >= 0)
-        {
-            float _percent = ((float)hp / (float)hpMax);
-            hpBar.transform.localScale = new Vector3(_percent, hpBar.transform.localScale.y, hpBar.transform.localScale.z);
-        }
-        if(hp <= 0)
-        {
-            monster.SetInteger("hp", 0);
-            monster.SetBool("dead", true);
-        }
+    }
+
+    public void TakeDamage(int damage)
+    {
+        hp -= damage;
+        monster.SetTrigger("hurt");
     }
 
     void OnCollisionEnter2D(Collision2D coll)
@@ -51,9 +51,15 @@ public class MonsterController : MonoBehaviour
         player = null;
     }
 
+    // StartCoroutine(DelayThenFall(1.5f));
     IEnumerator DelayThenFall(float delay)
     {
         yield return new WaitForSeconds(delay);
+        Destroy(this.gameObject);
+    }
+
+    void Dead()
+    {
         Destroy(this.gameObject);
     }
 }
