@@ -50,7 +50,7 @@ public class PlayerAttack : MonoBehaviour
         print("OnTriggerEnter2D:" + other.gameObject.name);
         if (other.gameObject.CompareTag("Monster"))
         {
-            other.GetComponent<MonsterController>().TakeDamage(damage);
+            other.GetComponent<MarkController>().TakeDamage(damage);
         }
     }
 }
