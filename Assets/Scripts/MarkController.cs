@@ -2,64 +2,53 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MarkController : MonoBehaviour
+public class MarkController : Monster
 {
-    public Animator monster;
-    public Animator player;
-    public GameObject hpBar;
+    public float speed;
+    public float startWaitTime;
 
-    private int hp = 0;
-    private readonly int hpMax = 10;
+    private float waitTime;
+
+    public Transform movePos;
+    public Transform leftDownPos;
+    public Transform rightUpPos; 
 
     // Start is called before the first frame update
-    void Start()
+    public void Start()
     {
+        hpMax = 5;
+        hp = hpMax;
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Animator>();
         monster = GameObject.FindGameObjectWithTag("Monster").GetComponent<Animator>();
-        hp = hpMax;
-    }
+
+        waitTime = startWaitTime;
+        movePos.position = GetRandomPos();
+
+    } 
 
     // Update is called once per frame
-    void Update()
+    public void Update()
     {
-        print("hp:" + hp);
-        float _percent = ((float)hp / (float)hpMax);
-        hpBar.transform.localScale = new Vector3(_percent, hpBar.transform.localScale.y, hpBar.transform.localScale.z);
-        if (hp <= 0)
+        base.Update();
+
+        transform.position = Vector2.MoveTowards(transform.position, movePos.position, speed * Time.deltaTime);
+        if(Vector2.Distance(transform.position, movePos.position) < 0.1f)
         {
-            monster.SetTrigger("dead");
-            Invoke("Dead", 1.2f);
-            //StartCoroutine(DelayThenFall(1.0f));
+            if(waitTime <= 0)
+            {
+                movePos.position = GetRandomPos();
+                waitTime = startWaitTime;
+            }
+            else
+            {
+                waitTime -= Time.deltaTime;
+            }
         }
-
     }
 
-    public void TakeDamage(int damage)
+    Vector2 GetRandomPos()
     {
-        hp -= damage;
-        monster.SetTrigger("hurt");
-    }
-
-    void OnCollisionEnter2D(Collision2D coll)
-    {
-        print("進入碰撞: " + coll.gameObject.name);
-        player = coll.gameObject.GetComponent<Animator>();
-    }
-    void OnCollisionExit2D(Collision2D coll)
-    {
-        print("離開碰撞: " + coll.gameObject.name);
-        player = null;
-    }
-
-    // StartCoroutine(DelayThenFall(1.5f));
-    IEnumerator DelayThenFall(float delay)
-    {
-        yield return new WaitForSeconds(delay);
-        Destroy(this.gameObject);
-    }
-
-    void Dead()
-    {
-        Destroy(this.gameObject);
+        Vector2 randomPos = new Vector2(Random.Range(leftDownPos.position.x, rightUpPos.position.x), Random.Range(leftDownPos.position.y, rightUpPos.position.y));
+        return randomPos;
     }
 }

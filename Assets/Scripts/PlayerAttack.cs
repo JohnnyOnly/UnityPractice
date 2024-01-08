@@ -18,7 +18,12 @@ public class PlayerAttack : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        string animName = player.GetCurrentAnimatorClipInfo(0)[0].clip.name;
+        AnimatorClipInfo[] clip = player.GetCurrentAnimatorClipInfo(0);
+        string animName = "";
+        if (clip.Length > 0)
+        {
+            animName = clip[0].clip.name;
+        }
         print("current animName:" + animName);
         if (animName.Equals("player-attack"))
         {
@@ -50,7 +55,7 @@ public class PlayerAttack : MonoBehaviour
         print("OnTriggerEnter2D:" + other.gameObject.name);
         if (other.gameObject.CompareTag("Monster"))
         {
-            other.GetComponent<MarkController>().TakeDamage(damage);
+            other.GetComponent<Monster>().TakeDamage(damage);
         }
     }
 }
