@@ -37,6 +37,8 @@ public abstract class Monster : MonoBehaviour
         monster.SetTrigger("hurt");
     }
 
+    public abstract Vector2 moveStrategy();
+
     void OnCollisionEnter2D(Collision2D coll)
     {
         print("進入碰撞: " + coll.gameObject.name);

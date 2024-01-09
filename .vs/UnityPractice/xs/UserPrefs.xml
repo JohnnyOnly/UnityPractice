@@ -1,10 +1,10 @@
 ﻿<Properties StartupConfiguration="{CACB4114-D82B-72A8-756A-0C7BD081F85E}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Monster.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/MarkController.cs">
     <Files>
-      <File FileName="Assets/Scripts/PlayerController.cs" Line="20" Column="24" />
-      <File FileName="Assets/Scripts/PlayerAttack.cs" Line="53" Column="36" />
-      <File FileName="Assets/Scripts/MarkController.cs" Line="12" Column="31" />
-      <File FileName="Assets/Scripts/Monster.cs" Line="5" Column="8" />
+      <File FileName="Assets/Scripts/PlayerController.cs" Line="51" Column="31" />
+      <File FileName="Assets/Scripts/PlayerAttack.cs" Line="14" Column="15" />
+      <File FileName="Assets/Scripts/MarkController.cs" Line="50" Column="10" />
+      <File FileName="Assets/Scripts/Monster.cs" Line="13" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -12,7 +12,7 @@
           <Node name="UnityPractice" expanded="True">
             <Node name="Assets" expanded="True">
               <Node name="Scripts" expanded="True">
-                <Node name="Monster.cs" selected="True" />
+                <Node name="MarkController.cs" selected="True" />
               </Node>
             </Node>
           </Node>
