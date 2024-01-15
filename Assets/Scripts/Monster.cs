@@ -10,7 +10,7 @@ public abstract class Monster : MonoBehaviour
     protected Animator player;
     protected int hpMax = 0;
     protected int hp = 0;
-
+    
     private Vector2 movePos;
     private MoveStrategy moveStrategy;
 
