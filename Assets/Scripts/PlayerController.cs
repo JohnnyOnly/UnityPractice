@@ -5,95 +5,47 @@ using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
-    public Animator player; //Animation anim, Animator player
-
-    private float speed = 0.05f;
-    private bool isWalking = false;
-
-    private Vector2 worldPosLeftBottom;
-    private Vector2 worldPosTopRight;
-
     private int playerHp = 0;
     private int playerHpMax = 100;
 
+    private GameObject playerManager;
+
     public Image hpBar;
+
 
     // Start is called before the first frame update
     void Start()
     {
         print("Start");
-        worldPosLeftBottom = Camera.main.ViewportToWorldPoint(Vector2.zero);
-        worldPosTopRight = Camera.main.ViewportToWorldPoint(Vector2.one);
-        
-        player = GetComponent<Animator>();
         playerHp = playerHpMax;
+
+        playerManager = GameObject.FindGameObjectWithTag("PlayerManager");
     }
 
     // Update is called once per frame
     void Update()
     {
-
-        Vector3 currentPosition = this.gameObject.transform.position;
         //上下左右, 1234
-        float timeSpeed = speed * Time.deltaTime * 60;
         if (Input.GetKey(KeyCode.UpArrow))
         {
-            print("Up");
-            player.Play("walk-up");
-            currentPosition += new Vector3(0, timeSpeed, 0);
-            isWalking = true;
+            this.MoveUp();
         }
         else if (Input.GetKey(KeyCode.DownArrow))
         {
-            print("Down");
-            player.Play("walk-down");
-            currentPosition -= new Vector3(0, timeSpeed, 0);
-            isWalking = true;
+            this.MoveDown();
         }
         else if (Input.GetKey(KeyCode.LeftArrow))
         {
-            print("Left");
-            player.Play("walk-left");
-            currentPosition -= new Vector3(timeSpeed, 0, 0);
-            isWalking = true;
+            this.MoveLeft();
         }
         else if (Input.GetKey(KeyCode.RightArrow))
         {
-            print("Right");
-            player.Play("walk-right");
-            currentPosition += new Vector3(timeSpeed, 0, 0);
-            isWalking = true;
+            this.MoveRight();
         }
         else
         {
-            isWalking = false;
+            this.DisableWalk();
         }
-
-        if (isWalking)
-        {
-            player.enabled = true;
-        }
-        else
-        {
-            AnimatorClipInfo[] clip = player.GetCurrentAnimatorClipInfo(0);
-            string animName = "";
-            if (clip.Length > 0)
-            {
-                animName = clip[0].clip.name;
-            }
-            print("current animName:" + animName);
-            if (animName.Equals("player-attack"))
-            {
-                player.enabled = true;
-            }
-            else
-            {
-                player.enabled = false;
-            }
-        }
- 
-        //避免超出場景
-        this.gameObject.transform.position = new Vector3(Mathf.Clamp(currentPosition.x, worldPosLeftBottom.x, worldPosTopRight.x), Mathf.Clamp(currentPosition.y, worldPosLeftBottom.y, worldPosTopRight.y), 0.0f);
 
         float _percent = ((float)playerHp / (float)playerHpMax);
         hpBar.transform.localScale = new Vector3(_percent, hpBar.transform.localScale.y, hpBar.transform.localScale.z);
@@ -114,5 +66,30 @@ public class PlayerController : MonoBehaviour
     {
         print("持續碰撞: " + coll.gameObject.name);
         //monsterAnim = coll.gameObject.GetComponent<Animator>();
+    }
+
+
+    private void MoveUp() {
+        print("move up");
+        playerManager.GetComponent<PlayerManager>().walkUp();
+    }
+
+    private void MoveDown() {
+        print("move down");
+        playerManager.GetComponent<PlayerManager>().walkDown();
+    }
+
+    private void MoveLeft() {
+        print("move left");
+        playerManager.GetComponent<PlayerManager>().walkLeft();
+    }
+
+    private void MoveRight() {
+        print("move right");
+        playerManager.GetComponent<PlayerManager>().walkRight();
+    }
+
+    private void DisableWalk(){
+        playerManager.GetComponent<PlayerManager>().disableWalk();
     }
 }
