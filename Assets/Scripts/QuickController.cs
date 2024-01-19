@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class QuickController : MonoBehaviour
 {
-    public GameObject playerManager;
+    private GameObject playerManager;
 
     void Start() {
         playerManager = GameObject.FindGameObjectWithTag("PlayerManager");
@@ -17,7 +17,9 @@ public class QuickController : MonoBehaviour
 
     public void walkDown() {
         print("quick down");
-        playerManager.GetComponent<PlayerManager>().walkDown();
+        for(int i=0; i<10; i++) {
+            playerManager.GetComponent<PlayerManager>().walkDown();
+        }
     }
 
     public void walkLeft() {
@@ -28,5 +30,18 @@ public class QuickController : MonoBehaviour
     public void walkRight() {
         print("quick right");
         playerManager.GetComponent<PlayerManager>().walkRight();
+    }
+
+    public void attack() {
+        print("quick attack");
+        playerManager.GetComponent<PlayerManager>().attack();
+        /*
+        PlayerManager manager = playerManager.GetComponent<PlayerManager>();
+        Transform[] transforms = manager.playerObject.GetComponentsInChildren<Transform>();
+        for(int i=0; i<transforms.Length; i++){
+            print(transforms[i].name);
+        }
+        manager.attack();
+        */
     }
 }

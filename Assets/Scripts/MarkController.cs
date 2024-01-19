@@ -38,7 +38,7 @@ public class MarkController : Monster
         }
 
         movePos = GetMovePos();
-        print("movePos:" + movePos);
+        //print("movePos:" + movePos);
         transform.position = Vector2.MoveTowards(transform.position, movePos, speed * Time.deltaTime);
         if(Vector2.Distance(transform.position, movePos) < 0.1f)
         {

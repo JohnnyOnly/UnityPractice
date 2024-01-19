@@ -42,6 +42,10 @@ public class PlayerController : MonoBehaviour
         {
             this.MoveRight();
         }
+        else if (Input.GetKeyDown(KeyCode.Space))
+        {
+            this.Attack();
+        }
         else
         {
             this.DisableWalk();
@@ -49,7 +53,7 @@ public class PlayerController : MonoBehaviour
 
         float _percent = ((float)playerHp / (float)playerHpMax);
         hpBar.transform.localScale = new Vector3(_percent, hpBar.transform.localScale.y, hpBar.transform.localScale.z);
-        print("currentHp:" + playerHp);
+        //print("currentHp:" + playerHp);
     }
 
 
@@ -87,6 +91,11 @@ public class PlayerController : MonoBehaviour
     private void MoveRight() {
         print("move right");
         playerManager.GetComponent<PlayerManager>().walkRight();
+    }
+
+    private void Attack(){
+        print("attack");
+        playerManager.GetComponent<PlayerManager>().attack();
     }
 
     private void DisableWalk(){

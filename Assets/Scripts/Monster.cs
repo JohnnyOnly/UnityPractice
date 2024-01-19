@@ -23,7 +23,7 @@ public abstract class Monster : MonoBehaviour
     // Update is called once per frame
     public void Update()
     {
-        print("hp:" + hp);
+        //print("hp:" + hp);
         float _percent = ((float)hp / (float)hpMax);
         hpBar.transform.localScale = new Vector3(_percent, hpBar.transform.localScale.y, hpBar.transform.localScale.z);
         if (hp <= 0)
