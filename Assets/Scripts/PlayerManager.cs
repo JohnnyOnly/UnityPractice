@@ -10,7 +10,6 @@ public class PlayerManager : MonoBehaviour
     private float speed = 0.1f;
     private bool isWalking = false;
     private bool isAttacking = false;
-    private bool isMoving = false;
     private Vector2 worldPosLeftBottom;
     private Vector2 worldPosTopRight;
     private float timeSpeed;
@@ -53,7 +52,7 @@ public class PlayerManager : MonoBehaviour
         }
         else
         {
-            if (!isMoving && !isAttacking)
+            if (!isWalking && !isAttacking)
             {
                 this.disableWalk();
             }
@@ -69,7 +68,7 @@ public class PlayerManager : MonoBehaviour
         if (isWalking || animName.Equals("player-attack"))
         {
             playerAnim.enabled = true;
-            isMoving = false;
+            isWalking = false;
         }
         else
         {
@@ -87,8 +86,6 @@ public class PlayerManager : MonoBehaviour
         playerAnim.Play("walk-up");
         playerObject.transform.position += new Vector3(0, timeSpeed, 0);
         isWalking = true;
-        isAttacking = false;
-        isMoving = true;
     }
 
     public void walkDown() {
@@ -96,8 +93,6 @@ public class PlayerManager : MonoBehaviour
         playerAnim.Play("walk-down");
         playerObject.transform.position -= new Vector3(0, timeSpeed, 0);
         isWalking = true;
-        isAttacking = false;
-        isMoving = true;
     }
 
     public void walkLeft() {
@@ -105,8 +100,6 @@ public class PlayerManager : MonoBehaviour
         playerAnim.Play("walk-left");
         playerObject.transform.position -= new Vector3(timeSpeed, 0, 0);
         isWalking = true;
-        isAttacking = false;
-        isMoving = true;
     }
 
     public void walkRight() {
@@ -114,13 +107,10 @@ public class PlayerManager : MonoBehaviour
         playerAnim.Play("walk-right");
         playerObject.transform.position += new Vector3(timeSpeed, 0, 0);
         isWalking = true;
-        isAttacking = false;
-        isMoving = true;
     }
 
     public void disableWalk() {
         isWalking = false;
-        isMoving = false;
     }
 
     public void attack()
