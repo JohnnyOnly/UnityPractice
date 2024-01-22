@@ -5,9 +5,11 @@ using UnityEngine;
 public class QuickController : MonoBehaviour
 {
     private GameObject playerManager;
+    private GameObject player;
 
     void Start() {
         playerManager = GameObject.FindGameObjectWithTag("PlayerManager");
+        player = GameObject.FindGameObjectWithTag("Player");
     }
 
     public void walkUp() {
@@ -43,5 +45,9 @@ public class QuickController : MonoBehaviour
         }
         manager.attack();
         */
+    }
+
+    public void addHp() {
+        player.GetComponent<PlayerController>().addHp();
     }
 }

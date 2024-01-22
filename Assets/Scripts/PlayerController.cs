@@ -74,6 +74,11 @@ public class PlayerController : MonoBehaviour
         //monsterAnim = coll.gameObject.GetComponent<Animator>();
     }
 
+    public void addHp() {
+        playerHp = playerHp + 10;
+        if(playerHp > playerHpMax) playerHp = playerHpMax;
+    }
+
 
     private void MoveUp() {
         print("move up");
