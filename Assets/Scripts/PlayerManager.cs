@@ -9,6 +9,8 @@ public class PlayerManager : MonoBehaviour
     private Animator playerAnim;
     private float speed = 0.1f;
     private bool isWalking = false;
+    private bool isAttacking = false;
+    private bool isMoving = false;
     private Vector2 worldPosLeftBottom;
     private Vector2 worldPosTopRight;
     private float timeSpeed;
@@ -29,33 +31,55 @@ public class PlayerManager : MonoBehaviour
     void Update()
     {
         timeSpeed = speed * Time.deltaTime * 60;
-
-        if (isWalking)
+        if (Input.GetKey(KeyCode.UpArrow))
         {
-            playerAnim.enabled = true;
+            this.walkUp();
+        }
+        else if (Input.GetKey(KeyCode.DownArrow))
+        {
+            this.walkDown();
+        }
+        else if (Input.GetKey(KeyCode.LeftArrow))
+        {
+            this.walkLeft();
+        }
+        else if (Input.GetKey(KeyCode.RightArrow))
+        {
+            this.walkRight();
+        }
+        else if (Input.GetKeyDown(KeyCode.Space))
+        {
+            this.attack();
         }
         else
         {
-            AnimatorClipInfo[] clip = playerAnim.GetCurrentAnimatorClipInfo(0);
-            string animName = "";
-            if (clip.Length > 0)
+            if (!isMoving && !isAttacking)
             {
-                animName = clip[0].clip.name;
+                this.disableWalk();
             }
-            //print("current animName:" + animName);
-            if (animName.Equals("player-attack"))
-            {
-                playerAnim.enabled = true;
-            }
-            else
-            {
-                playerAnim.enabled = false;
-            }
+        }
+
+        AnimatorClipInfo[] clip = playerAnim.GetCurrentAnimatorClipInfo(0);
+        string animName = "";
+        if (clip.Length > 0)
+        {
+            animName = clip[0].clip.name;
+        }
+
+        if (isWalking || animName.Equals("player-attack"))
+        {
+            playerAnim.enabled = true;
+            isMoving = false;
+        }
+        else
+        {
+            playerAnim.enabled = false;
         }
  
         Vector3 currentPosition = playerObject.transform.position;
         //避免超出場景
         playerObject.transform.position = new Vector3(Mathf.Clamp(currentPosition.x, worldPosLeftBottom.x, worldPosTopRight.x), Mathf.Clamp(currentPosition.y, worldPosLeftBottom.y, worldPosTopRight.y), 0.0f);
+        
     }
 
     public void walkUp() {
@@ -63,6 +87,8 @@ public class PlayerManager : MonoBehaviour
         playerAnim.Play("walk-up");
         playerObject.transform.position += new Vector3(0, timeSpeed, 0);
         isWalking = true;
+        isAttacking = false;
+        isMoving = true;
     }
 
     public void walkDown() {
@@ -70,6 +96,8 @@ public class PlayerManager : MonoBehaviour
         playerAnim.Play("walk-down");
         playerObject.transform.position -= new Vector3(0, timeSpeed, 0);
         isWalking = true;
+        isAttacking = false;
+        isMoving = true;
     }
 
     public void walkLeft() {
@@ -77,6 +105,8 @@ public class PlayerManager : MonoBehaviour
         playerAnim.Play("walk-left");
         playerObject.transform.position -= new Vector3(timeSpeed, 0, 0);
         isWalking = true;
+        isAttacking = false;
+        isMoving = true;
     }
 
     public void walkRight() {
@@ -84,10 +114,13 @@ public class PlayerManager : MonoBehaviour
         playerAnim.Play("walk-right");
         playerObject.transform.position += new Vector3(timeSpeed, 0, 0);
         isWalking = true;
+        isAttacking = false;
+        isMoving = true;
     }
 
     public void disableWalk() {
         isWalking = false;
+        isMoving = false;
     }
 
     public void attack()
@@ -97,12 +130,15 @@ public class PlayerManager : MonoBehaviour
         collider2D.enabled = true;
         playerAnim.SetTrigger("attack");
         StartCoroutine(DisableHixBox());
+        isWalking = true;
+        isAttacking = true;
     }
 
     IEnumerator DisableHixBox()
     {
         yield return new WaitForSeconds(0.5f);
         collider2D.enabled = false;
+        isAttacking = false;
     }
 
 }

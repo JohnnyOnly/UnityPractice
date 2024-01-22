@@ -26,6 +26,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         //上下左右, 1234
+        /*
         if (Input.GetKey(KeyCode.UpArrow))
         {
             this.MoveUp();
@@ -50,6 +51,7 @@ public class PlayerController : MonoBehaviour
         {
             this.DisableWalk();
         }
+        */
 
         float _percent = ((float)playerHp / (float)playerHpMax);
         hpBar.transform.localScale = new Vector3(_percent, hpBar.transform.localScale.y, hpBar.transform.localScale.z);
