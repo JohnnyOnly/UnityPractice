@@ -43,11 +43,16 @@ public class QuickController : MonoBehaviour
         for(int i=0; i<transforms.Length; i++){
             print(transforms[i].name);
         }
-        manager.attack();
         */
     }
 
     public void addHp() {
+        print("quick add hp");
         player.GetComponent<PlayerController>().addHp();
+    }
+
+    public void speedUp() {
+        print("quick speed up");
+        playerManager.GetComponent<PlayerManager>().SpeedUp();
     }
 }

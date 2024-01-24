@@ -7,7 +7,7 @@ public class PlayerManager : MonoBehaviour
     public GameObject playerObject;
 
     private Animator playerAnim;
-    private float speed = 0.1f;
+    private float speed = 0.05f;
     private bool isWalking = false;
     private bool isAttacking = false;
     private Vector2 worldPosLeftBottom;
@@ -121,7 +121,6 @@ public class PlayerManager : MonoBehaviour
         playerAnim.SetTrigger("attack");
         StartCoroutine(DisableHixBox());
         isWalking = true;
-        isAttacking = true;
     }
 
     IEnumerator DisableHixBox()
@@ -131,4 +130,16 @@ public class PlayerManager : MonoBehaviour
         isAttacking = false;
     }
 
+    public void SpeedUp() 
+    {
+        print("speed up");
+        speed = 0.2f;
+        StartCoroutine(RestoreSpeed());
+    }
+
+    IEnumerator RestoreSpeed()
+    {
+        yield return new WaitForSeconds(3f);
+        speed = 0.05f;
+    }
 }
